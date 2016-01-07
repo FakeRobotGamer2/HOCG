@@ -24,3 +24,9 @@ im fakerobotgamer on twitter
 ## should i have this on the public facing internet
 
 NO.
+
+## but why ; ;
+
+it has no security features whatsoever and has no ratelimiting or message size limit or any sort of reasonable restrictions whatsoever, like i had the entire galt speech as my username at one point all i had to do was take out all of the colons because you cant have colons in usernames
+
+that a colon is the only thing you cant use in a username should also give you another huge clue as to how this works and why you should really not trust this with anything ever
