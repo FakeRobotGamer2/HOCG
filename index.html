@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+  <head>
+    <title>homosexual only chat zone</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 16px Times New Roman, Times; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+	  #messages li.sysmsg { font-style: italic; color: grey; }
+	  #messages .nick { color: red; font-weight: bold; }
+	  #messages .localnick { color: blue; font-weight: bold; }
+	  #messages .chattext { color: black; }
+	  #messages .stupidchild { color: orange; font-weight: bold; }
+	  #messagecontainer { padding-bottom: 3em; }
+    </style>
+  </head>
+  <body>
+	<audio id="welcome" src="welcome.wav" preload="auto"></audio>
+	<audio id="im" src="im.wav" preload="auto"></audio>
+	<audio id="gotmail" src="gotmail.wav" preload="auto"></audio>
+	<audio id="buddyin" src="buddyin.wav" preload="auto"></audio>
+    <div id='messagecontainer'>
+		<ul id="messages"></ul>
+	</div>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="jquery.linky.js"></script>
+	<script>
+	  var socket = io();
+	  var usernick = "Buttface McGee";
+	  var doublepost = new Date().getTime();
+	  
+	  function chatemitter(msg, msgtype) {
+		if(msg.indexOf(':') > -1) {
+			var parsedchat = msg.split(':');
+			var chattext = parsedchat.slice(1).join(':');
+			var chatli = $("<li class='chat'>")
+			if(msgtype == "remote") {
+				play_multi_sound('im');
+				chatli = chatli.append($("<span class='nick'>").text(parsedchat[0] + ":"));
+			}
+			else if(msgtype == "stupidchild") {
+				chatli = chatli.append($("<span class='stupidchild'>").text(parsedchat[0] + ":"));
+			}
+			else {
+				chatli = chatli.append($("<span class='localnick'>").text(parsedchat[0] + ":"));
+			}
+			chatli = chatli.append($("<span class='chattext'>").text(chattext).linky());
+			$('#messages').append(chatli);
+		}
+		else {
+			document.getElementById('buddyin').play();
+			$('#messages').append($('<li class="sysmsg">').text(msg));
+		}
+		window.scrollTo(0, document.body.scrollHeight);
+	 }
+	var channel_max = 10;										// number of channels
+	audiochannels = new Array();
+	for (a=0;a<channel_max;a++) {									// prepare the channels
+		audiochannels[a] = new Array();
+		audiochannels[a]['channel'] = new Audio();						// create a new audio object
+		audiochannels[a]['finished'] = -1;							// expected end time for this channel
+	}
+	function play_multi_sound(s) {
+		for (a=0;a<audiochannels.length;a++) {
+			thistime = new Date();
+			if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
+				audiochannels[a]['finished'] = thistime.getTime() + document.getElementById(s).duration*1000;
+				audiochannels[a]['channel'].src = document.getElementById(s).src;
+				audiochannels[a]['channel'].load();
+				audiochannels[a]['channel'].play();
+				break;
+			}
+		}
+	}
+	 
+	  $('form').submit(function(){
+		var nowtime = new Date().getTime();
+		if (nowtime - doublepost < 100) {
+			return false;
+		}
+		doublepost = new Date().getTime();
+		var mssg = $('#m').val();
+		if (mssg.substring(0,5) == "/nick") {
+			if(mssg.indexOf(':') > -1) {
+				socket.emit('chat message', "Everyone point and laugh at " + usernick + " for they tried to use FORBIDDEN CHARACTERS in their identifier, and failed.");
+			}
+			else {
+				var oldnick = usernick;
+				usernick = mssg.substring(6);
+				socket.emit('chat message', "Unfortunately for everyone, " + oldnick + " is now known as " + usernick + ", oblivion help us all.");
+			}
+		}
+		else {
+			socket.emit('chat message', usernick + ': ' + $('#m').val());
+		}
+		$('#m').val('');
+		return false;
+	  });
+	  socket.on('chat message', function(msg){
+		chatemitter(msg, "remote");
+	  });
+	 
+	 socket.on('local chat message', function(msg) {
+		chatemitter(msg, "local");
+	 });
+	 
+	 chatemitter("StupiderChild: Hello there " + usernick + "! If this is not your name, change it by typing /nick then a new name. Praises and ritual in honor of our dark lady Satan are not required, but are certainly recommended.", "stupidchild")
+	 document.getElementById('welcome').play();
+	 setTimeout(function(){ document.getElementById('gotmail').play(); }, 2500);
+	  
+	</script>
+  </body>
+</html>
