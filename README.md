@@ -15,6 +15,8 @@ maybe theres dependencies i dont know i didnt .gitexclude anything it should jus
 
 you are absolutly right but its a joke based on the "smarterchild" aim bot thing ok no actual person is stupid and intelligence/stupidity arent real. also while you're there tell tumblr i dont find stephen universe particularly engaging and vastly prefer UNDERTALE
 
+if it bothers you just ctrl+f stupiderchild and change it to something cool like DIE CIS SCUM or DOWN WITH CIS
+
 disclaimer: if you run this facing the public internet you make a STRONG case for stupidity being real anyway
 
 ## where can i scream obscenities and slurs at you 140 characters at a time, soon to be 10,000?
@@ -30,3 +32,7 @@ NO.
 it has no security features whatsoever and has no ratelimiting or message size limit or any sort of reasonable restrictions whatsoever, like i had the entire galt speech as my username at one point all i had to do was take out all of the colons because you cant have colons in usernames
 
 that a colon is the only thing you cant use in a username should also give you another huge clue as to how this works and why you should really not trust this with anything ever
+
+## so what CAN i use it for
+
+put it on your computer on a small, trusted network and have fun with your friends i can confirm that works well however there are no warranties and i am not responsible if you managed to break your toster or something with it also why is your toaster on the home network stop buying internet of things crap you dont need it
