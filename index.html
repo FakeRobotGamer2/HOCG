@@ -6,8 +6,8 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 16px Times New Roman, Times; }
       form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      form input { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; margin-right: 10px;}
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
@@ -28,7 +28,7 @@
 		<ul id="messages"></ul>
 	</div>
     <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+      <input id="m" autocomplete="off" /><button id="mb" class="mb" type="button" autocomplete="off" onclick="muteAudio();" >Mute Sounds</button><button>Send</button>
     </form>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="jquery-1.11.1.js"></script>
@@ -36,6 +36,7 @@
 	<script src="js.cookie.js"></script>
 	<script>
 	  var socket = io();
+	  var muted = false;
 	  if (!Cookies.get('username')) {
 		var usernick = "Buttface McGee";
 		Cookies.set('username', usernick, { 'expires': 3650 });
@@ -45,6 +46,16 @@
 	  }
 	  var doublepost = new Date().getTime();
 	  socket.emit('chat message', "Oh joy, " + usernick + " has condescended to grace us with their presence.");
+	  
+	  function muteAudio() {
+		muted = !muted;
+		if (muted) {
+			document.getElementById('mb').innerHTML = "Unmute Sounds";
+		}
+		else {
+			document.getElementById('mb').innerHTML = "Mute Sounds";
+		}
+	  }
 	  
 	  function chatemitter(msg, msgtype) {
 		if(msg.indexOf(':') > -1) {
@@ -72,7 +83,7 @@
 				$('#messages').append($('<li class="sysmsg">').text("You are now " + usernick + " much to the rest of the chatroom's disappointment."));
 			}
 			else {
-				document.getElementById('buddyin').play();
+				play_multi_sound('buddyin');
 				$('#messages').append($('<li class="sysmsg">').text(msg));
 			}
 		}
@@ -87,6 +98,9 @@
 		audiochannels[a]['finished'] = -1;							// expected end time for this channel
 	}
 	function play_multi_sound(s) {
+		if (muted) {
+			return false;
+		}
 		for (a=0;a<audiochannels.length;a++) {
 			thistime = new Date();
 			if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
@@ -99,37 +113,8 @@
 		}
 	}
 	
-	function setSource() {
-		var audio = document.getElementById('welcome');
-		audio.src = "welcome.wav";
-	}
-	
-	//all of this media playback stuff is an attempt to get sounds to play on android/chrome
-	//it doesnt work but i tried
-	function mediaPlaybackRequiresUserGesture() {
-	  // test if play() is ignored when not called from an input event handler
-	  var audio = document.createElement('audio');
-	  audio.play();
-	  return audio.paused;
-	}
-	
-	function removeBehaviorsRestrictions() {
-	  var audio = document.querySelector('audio');
-	  audio.load();
-	  window.removeEventListener('keydown', removeBehaviorsRestrictions);
-	  window.removeEventListener('mousedown', removeBehaviorsRestrictions);
-	  window.removeEventListener('touchstart', removeBehaviorsRestrictions);
-	  setTimeout(setSource, 1000);
-	}
-
-	if (mediaPlaybackRequiresUserGesture()) {
-	  window.addEventListener('keydown', removeBehaviorsRestrictions);
-	  window.addEventListener('mousedown', removeBehaviorsRestrictions);
-	  window.addEventListener('touchstart', removeBehaviorsRestrictions);
-	} else {
-		document.getElementById('welcome').play();
-		setTimeout(function(){ document.getElementById('gotmail').play(); }, 2500);
-	}
+	play_multi_sound('welcome');
+	setTimeout(function(){ play_multi_sound('gotmail'); }, 2500);
 	 
 	  $('form').submit(function(){
 		var nowtime = new Date().getTime();
@@ -138,6 +123,9 @@
 		}
 		doublepost = new Date().getTime();
 		var mssg = $('#m').val();
+		if (mssg == "") {
+			return false;
+		}
 		if (mssg.substring(0,5) == "/nick") {
 			if(mssg.indexOf(':') > -1) {
 				socket.emit('chat message', "Everyone point and laugh at " + usernick + " for they tried to use FORBIDDEN CHARACTERS in their identifier, and failed.");
