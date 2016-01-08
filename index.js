@@ -9,6 +9,12 @@ app.use(favicon(__dirname + '/favicon.ico'));
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
+app.get('/styles.css', function(req, res){
+  res.sendFile(__dirname + '/styles.css');
+});
+app.get('/client.js', function(req, res){
+  res.sendFile(__dirname + '/client.js');
+});
 
 app.use(express.static('public'));
 

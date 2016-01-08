@@ -1,0 +1,47 @@
+.chat{min-height:50px}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font: 16px Times New Roman, Times; }
+form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+form input { border: 0; padding: 10px; width: 90%;  }
+form button { width: 10%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+#messages { list-style-type: none; margin: 0; padding: 0; }
+#messages li { padding: 5px 10px; }
+#messages li:nth-child(odd) { background: #eee; }
+#messages li.sysmsg { font-style: italic; color: grey; }
+#messages .nick { color: red; font-weight: bold; }
+#messages .localnick { color: blue; font-weight: bold;}
+#messages .chattext { color: black; }
+#messages .stupidchild { color: orange; font-weight: bold; }
+#messagecontainer { padding-bottom: 3em;padding-left:0 }
+.talk-bubble {
+    margin: 20px;
+    position: relative;
+    height: auto;
+    background-color:lightgrey;
+    padding:15px
+}
+		/* Right triangle placed top left flush. */
+.tri-right.border.left-top:before {
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -40px;
+    right: auto;
+    top: -8px;
+    bottom: auto;
+    border: 32px solid;
+    border-color: #666 transparent transparent transparent;
+}
+.tri-right.left-top:after{
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -20px;
+    right: auto;
+    top: 0px;
+    bottom: auto;
+    border: 22px solid;
+    border-color: lightgrey transparent transparent transparent;
+}

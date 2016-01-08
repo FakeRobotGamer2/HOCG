@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>homosexual only chat zone</title>
+<<<<<<< HEAD
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 16px Times New Roman, Times; }
@@ -18,22 +19,30 @@
 	  #messages .stupidchild { color: orange; font-weight: bold; }
 	  #messagecontainer { padding-bottom: 3em; }
     </style>
+=======
+
+	     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	  <link rel="stylesheet" type="text/css" href="/styles.css">
+>>>>>>> de45286936ce7571afbfa127330df843c1fb041c
   </head>
   <body>
 	<audio id="welcome" src="welcome.wav" preload="auto"></audio>
 	<audio id="im" src="im.wav" preload="auto"></audio>
 	<audio id="gotmail" src="gotmail.wav" preload="auto"></audio>
 	<audio id="buddyin" src="buddyin.wav" preload="auto"></audio>
-    <div id='messagecontainer'>
-		<ul id="messages"></ul>
+    <div id='messagecontainer' class=" col-lg-12 col-xs-12">
+		<div id="messages" class="col-xs-12"></div>
 	</div>
     <form action="">
       <input id="m" autocomplete="off" /><button id="mb" class="mb" type="button" autocomplete="off" onclick="muteAudio();" >Mute Sounds</button><button>Send</button>
     </form>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="jquery-1.11.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="jquery.linky.js"></script>
 	<script src="js.cookie.js"></script>
+<<<<<<< HEAD
 	<script>
 	  var socket = io();
 	  var muted = false;
@@ -154,5 +163,8 @@
 	 chatemitter("StupiderChild: Hello there " + usernick + "! If this is not your name, change it by typing /nick then a new name. Praises and ritual in honor of our dark lady Satan are not required, but are certainly recommended.", "stupidchild")
 	  
 	</script>
+=======
+  <script src="/client.js"></script>
+>>>>>>> de45286936ce7571afbfa127330df843c1fb041c
   </body>
 </html>
