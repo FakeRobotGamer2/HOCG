@@ -2,6 +2,7 @@
  * Created by jessie on 1/8/16.
  */
 var socket = io();
+var muted= false;
 if (!Cookies.get('username')) {
     var usernick = "Buttface McGee";
     Cookies.set('username', usernick, {'expires': 3650});
@@ -12,9 +13,19 @@ else { //if u hack ur cookies u can probably have colons in ur username lmao but
 var doublepost = new Date().getTime();
 socket.emit('chat message', "Oh joy, " + usernick + " has condescended to grace us with their presence.");
 
+
+function muteAudio() {
+    muted = !muted;
+    if (muted) {
+        document.getElementById('mb').innerHTML = "Unmute Sounds";
+    }
+    else {
+        document.getElementById('mb').innerHTML = "Mute Sounds";
+    }
+}
+
 function chatemitter(msg, msgtype) {
     if (msg.indexOf(':') > -1) {
-
 
         var parsedchat = msg.split(':');
         var chattext = parsedchat.slice(1).join(':');
@@ -29,9 +40,16 @@ function chatemitter(msg, msgtype) {
         else {
             chatli = chatli.append($("<span class='localnick'>").text(parsedchat[0] + ":"));
         }
-        chatli = chatli.append($("<span class='chattext'>").text(chattext).linky());
-        $('#messages').append(chatli);
-        chatli.append('</div>')
+        ran_num = Math.floor((Math.random() * 10000) + 1);
+        chatli = chatli.append($("<span id='" + ran_num + "' class='chattext'>").text(chattext).linky());
+
+        $('<div></div>').appendTo('#messages').hide().append(chatli).fadeIn();
+        chatli.append('</div>');
+        var x = new EmbedJS({
+            element: document.getElementById(String(ran_num)),
+             googleAuthKey : 'AIzaSyCqFouT8h5DKAbxlrTZmjXEmNBjC69f0ts'
+          });
+        x.render();
     }
     else {
 
@@ -56,6 +74,9 @@ for (a = 0; a < channel_max; a++) {									// prepare the channels
     audiochannels[a]['finished'] = -1;							// expected end time for this channel
 }
 function play_multi_sound(s) {
+    if (muted) {
+			return false;
+		}
     for (a = 0; a < audiochannels.length; a++) {
         thistime = new Date();
         if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
