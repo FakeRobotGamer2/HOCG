@@ -41,7 +41,7 @@ function chatemitter(msg, msgtype) {
             chatli = chatli.append($("<span class='localnick'>").text(parsedchat[0] + ":"));
         }
         ran_num = Math.floor((Math.random() * 10000) + 1);
-        chatli = chatli.append($("<span id='" + ran_num + "' class='chattext'>").text(chattext).linky());
+        chatli = chatli.append($("<span id='" + ran_num + "' class='chattext'>").text(chattext));
 
         $('<div></div>').appendTo('#messages').hide().append(chatli).fadeIn();
         chatli.append('</div>');
