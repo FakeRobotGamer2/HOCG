@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>homosexual only chat zone</title>
+<<<<<<< HEAD
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat:700,400">
 	     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 	  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -9,6 +10,31 @@
 	  <link rel="stylesheet" href="https://cdn.jsdelivr.net/embed.js/3.6.2/embed.min.css"/>
 
 
+=======
+<<<<<<< HEAD
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 16px Times New Roman, Times; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; margin-right: 10px;}
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+	  #messages li.sysmsg { font-style: italic; color: grey; }
+	  #messages .nick { color: red; font-weight: bold; }
+	  #messages .localnick { color: blue; font-weight: bold; }
+	  #messages .chattext { color: black; }
+	  #messages .stupidchild { color: orange; font-weight: bold; }
+	  #messagecontainer { padding-bottom: 3em; }
+    </style>
+=======
+
+	     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	  <link rel="stylesheet" type="text/css" href="/styles.css">
+>>>>>>> de45286936ce7571afbfa127330df843c1fb041c
+>>>>>>> refs/remotes/origin/master
   </head>
   <body>
 	<audio id="welcome" src="welcome.wav" preload="auto"></audio>
@@ -19,14 +45,144 @@
 		<div id="messages" class="col-xs-12"></div>
 	</div>
     <form action="">
+<<<<<<< HEAD
       <input id="m" autocomplete="off" /><button id="mb" class="mb" type="button" autocomplete="off" onclick="muteAudio();" >Mute</button><button>Send</button>
+=======
+      <input id="m" autocomplete="off" /><button id="mb" class="mb" type="button" autocomplete="off" onclick="muteAudio();" >Mute Sounds</button><button>Send</button>
+>>>>>>> refs/remotes/origin/master
     </form>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="jquery-1.11.1.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="jquery.linky.js"></script>
 	<script src="js.cookie.js"></script>
+<<<<<<< HEAD
 	<script src="https://cdn.jsdelivr.net/embed.js/3.6.2/embed.min.js"></script>
+=======
+<<<<<<< HEAD
+	<script>
+	  var socket = io();
+	  var muted = false;
+	  if (!Cookies.get('username')) {
+		var usernick = "Buttface McGee";
+		Cookies.set('username', usernick, { 'expires': 3650 });
+	  }
+	  else { //if u hack ur cookies u can probably have colons in ur username lmao but who cares lets silicon valley this shit
+		var usernick = Cookies.get('username');
+	  }
+	  var doublepost = new Date().getTime();
+	  socket.emit('chat message', "Oh joy, " + usernick + " has condescended to grace us with their presence.");
+	  
+	  function muteAudio() {
+		muted = !muted;
+		if (muted) {
+			document.getElementById('mb').innerHTML = "Unmute Sounds";
+		}
+		else {
+			document.getElementById('mb').innerHTML = "Mute Sounds";
+		}
+	  }
+	  
+	  function chatemitter(msg, msgtype) {
+		if(msg.indexOf(':') > -1) {
+			var parsedchat = msg.split(':');
+			var chattext = parsedchat.slice(1).join(':');
+			var chatli = $("<li class='chat'>")
+			if(msgtype == "remote") {
+				play_multi_sound('im');
+				chatli = chatli.append($("<span class='nick'>").text(parsedchat[0] + ":"));
+			}
+			else if(msgtype == "stupidchild") {
+				chatli = chatli.append($("<span class='stupidchild'>").text(parsedchat[0] + ":"));
+			}
+			else {
+				chatli = chatli.append($("<span class='localnick'>").text(parsedchat[0] + ":"));
+			}
+			chatli = chatli.append($("<span class='chattext'>").text(chattext).linky());
+			$('#messages').append(chatli);
+		}
+		else {
+			
+			if(msgtype == "local" && msg.indexOf("Oh joy,") > -1) {
+			}
+			else if(msgtype == "local" && msg.indexOf("Unfortunately for everyone,") > -1) {
+				$('#messages').append($('<li class="sysmsg">').text("You are now " + usernick + " much to the rest of the chatroom's disappointment."));
+			}
+			else {
+				play_multi_sound('buddyin');
+				$('#messages').append($('<li class="sysmsg">').text(msg));
+			}
+		}
+		window.scrollTo(0, document.body.scrollHeight);
+	 }
+	
+	var channel_max = 10;										// number of channels
+	audiochannels = new Array();
+	for (a=0;a<channel_max;a++) {									// prepare the channels
+		audiochannels[a] = new Array();
+		audiochannels[a]['channel'] = new Audio();						// create a new audio object
+		audiochannels[a]['finished'] = -1;							// expected end time for this channel
+	}
+	function play_multi_sound(s) {
+		if (muted) {
+			return false;
+		}
+		for (a=0;a<audiochannels.length;a++) {
+			thistime = new Date();
+			if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
+				audiochannels[a]['finished'] = thistime.getTime() + document.getElementById(s).duration*1000;
+				audiochannels[a]['channel'].src = document.getElementById(s).src;
+				audiochannels[a]['channel'].load();
+				audiochannels[a]['channel'].play();
+				break;
+			}
+		}
+	}
+	
+	play_multi_sound('welcome');
+	setTimeout(function(){ play_multi_sound('gotmail'); }, 2500);
+	 
+	  $('form').submit(function(){
+		var nowtime = new Date().getTime();
+		if (nowtime - doublepost < 100) {
+			return false;
+		}
+		doublepost = new Date().getTime();
+		var mssg = $('#m').val();
+		if (mssg == "") {
+			return false;
+		}
+		if (mssg.substring(0,5) == "/nick") {
+			if(mssg.indexOf(':') > -1) {
+				socket.emit('chat message', "Everyone point and laugh at " + usernick + " for they tried to use FORBIDDEN CHARACTERS in their identifier, and failed.");
+			}
+			else {
+				var oldnick = usernick;
+				usernick = mssg.substring(6);
+				socket.emit('chat message', "Unfortunately for everyone, " + oldnick + " is now known as " + usernick + ", oblivion help us all.");
+				Cookies.set('username', usernick, { 'expires': 3650 });
+			}
+		}
+		else {
+			socket.emit('chat message', usernick + ': ' + $('#m').val());
+		}
+		$('#m').val('');
+		return false;
+	  });
+	  socket.on('chat message', function(msg){
+		chatemitter(msg, "remote");
+	  });
+	 
+	 socket.on('local chat message', function(msg) {
+		chatemitter(msg, "local");
+	 });
+	 
+	 chatemitter("StupiderChild: Hello there " + usernick + "! If this is not your name, change it by typing /nick then a new name. Praises and ritual in honor of our dark lady Satan are not required, but are certainly recommended.", "stupidchild")
+	  
+	</script>
+=======
+>>>>>>> refs/remotes/origin/master
   <script src="/client.js"></script>
+>>>>>>> de45286936ce7571afbfa127330df843c1fb041c
   </body>
 </html>
